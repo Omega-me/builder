@@ -1,29 +1,25 @@
 'use client';
 import clsx from 'clsx';
-import { EyeIcon, Laptop, Redo2, Smartphone, Tablet, Undo2, X } from 'lucide-react';
+import { EyeIcon, FilePenLine, Laptop, Redo2, Smartphone, Tablet, Undo2, X } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../ui/tooltip';
 import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs';
 import { eDeviceTypes } from '@/common/enums';
 import { Button } from '../../ui/button';
-import { useEditor } from '@/hooks';
-import { Checkbox } from '../../ui/checkbox';
-import { useState } from 'react';
-import { Input } from '../../ui/input';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { IEditorState, IEditorDimensions } from '@/common/interfaces';
 
-interface EditorNavigationProps {
+interface Props {
   state: IEditorState;
   undo: () => void;
   redo: () => void;
   changeDevice: (payload: { device: eDeviceTypes }) => void;
   changeDimensions: (payload: { dimensions?: IEditorDimensions }) => void;
   handleContainerCustomSize: (e: CheckedState) => void;
-  customEditorSize: boolean;
   handlePreviewClick: () => void;
+  toggleCustomDimensions: (payload: { isCustomDimension: boolean }) => void;
 }
 
-const EditorNavigation = (props: EditorNavigationProps) => {
+const EditorNavigation = (props: Props) => {
   return (
     <TooltipProvider>
       <nav
@@ -34,85 +30,69 @@ const EditorNavigation = (props: EditorNavigationProps) => {
           <EyeIcon />
         </Button>
         <aside className="flex justify-center">
-          {!props.customEditorSize ? (
-            <Tabs
-              defaultValue={eDeviceTypes.DESKTOP}
-              className="w-fit "
-              value={props.state.editor.device}
-              onValueChange={value => {
+          <Tabs
+            defaultValue={eDeviceTypes.DESKTOP}
+            className="w-fit"
+            value={props.state.editor.device}
+            onValueChange={value => {
+              if (value === eDeviceTypes.CUSTOM) {
+                props.toggleCustomDimensions({ isCustomDimension: !props.state.editor.isCustomDimension });
+              } else {
                 props.changeDevice({ device: value as eDeviceTypes });
-              }}>
-              <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
-                <Tooltip>
-                  <TooltipTrigger>
-                    <TabsTrigger value={eDeviceTypes.DESKTOP} className="data-[state=active]:bg-muted w-10 h-10 p-0">
-                      <Laptop />
-                    </TabsTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{eDeviceTypes.DESKTOP}</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <TabsTrigger value={eDeviceTypes.TABLET} className="w-10 h-10 p-0 data-[state=active]:bg-muted">
-                      <Tablet />
-                    </TabsTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{eDeviceTypes.TABLET}</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <TabsTrigger value={eDeviceTypes.MOBILE} className="w-10 h-10 p-0 data-[state=active]:bg-muted">
-                      <Smartphone />
-                    </TabsTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{eDeviceTypes.MOBILE}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TabsList>
-            </Tabs>
-          ) : (
-            <div className="flex justify-start items-center">
-              <Input
-                onChange={e =>
-                  props.changeDimensions({
-                    dimensions: {
-                      ...props.state.editor.editorDimensions,
-                      width: e.target.value,
-                    },
-                  })
-                }
-                className="w-[100px]"
-                type="text"
-                placeholder="Width"
-                width={30}
-              />{' '}
-              <X className="w-10" />
-              <Input
-                onChange={e =>
-                  props.changeDimensions({
-                    dimensions: {
-                      ...props.state.editor.editorDimensions,
-                      height: e.target.value,
-                    },
-                  })
-                }
-                className="w-[100px] mr-5"
-                type="text"
-                placeholder="Height"
-              />
-            </div>
-          )}
-          <div className="flex items-center space-x-2">
-            <Checkbox id="customEditorSize" onCheckedChange={props.handleContainerCustomSize} />
-            <label htmlFor="customEditorSize" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Use Custom size
-            </label>
-          </div>
+              }
+            }}>
+            <TabsList className="grid w-full grid-cols-4 bg-transparent h-fit">
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger
+                    disabled={props.state.editor.isCustomDimension}
+                    value={eDeviceTypes.DESKTOP}
+                    className="data-[state=active]:bg-muted w-10 h-10 p-0">
+                    <Laptop />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{eDeviceTypes.DESKTOP}</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger
+                    disabled={props.state.editor.isCustomDimension}
+                    value={eDeviceTypes.TABLET}
+                    className="w-10 h-10 p-0 data-[state=active]:bg-muted">
+                    <Tablet />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{eDeviceTypes.TABLET}</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger
+                    disabled={props.state.editor.isCustomDimension}
+                    value={eDeviceTypes.MOBILE}
+                    className="w-10 h-10 p-0 data-[state=active]:bg-muted">
+                    <Smartphone />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{eDeviceTypes.MOBILE}</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TabsTrigger value={eDeviceTypes.CUSTOM} className="w-10 h-10 p-0 data-[state=active]:bg-muted">
+                    <FilePenLine />
+                  </TabsTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{eDeviceTypes.CUSTOM}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TabsList>
+          </Tabs>
         </aside>
         <aside className="flex items-center gap-2">
           <Button disabled={!(props.state.history.currentIndex > 0)} onClick={props.undo} variant={'ghost'} size={'icon'} className="hover:bg-slate-800">

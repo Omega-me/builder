@@ -6,11 +6,11 @@ import clsx from 'clsx';
 import { Trash } from 'lucide-react';
 import React from 'react';
 
-interface TextComponentProps {
+interface Props {
   element: IEditorElement;
 }
 
-const TextComponent = (props: TextComponentProps) => {
+const TextComponent = (props: Props) => {
   const { state, deleteElement, clickElement, updateElement } = useEditor();
 
   const handleDeleteElement = () => {

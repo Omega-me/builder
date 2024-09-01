@@ -9,15 +9,29 @@ import {
   changeDevice as changeDeviceAction,
   changeDimensions as changeDimensionsAction,
   toggleLiveMode as toggleLiveModeAction,
+  toggleCustomDimensions as toggleCustomDimensionsAction,
   togglePreviewMode as togglePreviewModeAction,
   redo as redoAction,
   undo as undoAction,
   loadData as loadDataAction,
 } from '@/state/redux/stores/editor.store';
+import { useWindowDimensions } from '../useWindowDimensions';
+import { useEffect, useState } from 'react';
 
 export const useEditor = () => {
+  const dim = useWindowDimensions();
   const state = useAppSelector(s => s.editor);
+  const [editorStandartHeight, setEditorStandartHeight] = useState((dim?.height as number) - 100);
+  const editorStandartWidth = dim?.width;
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (state.editor.isCustomDimension) {
+      setEditorStandartHeight((dim?.height as number) - 115);
+    } else {
+      setEditorStandartHeight((dim?.height as number) - 100);
+    }
+  }, [state.editor.isCustomDimension]);
 
   /**
    *
@@ -81,6 +95,14 @@ export const useEditor = () => {
    *
    * @param payload
    */
+  const toggleCustomDimensions = (payload: { isCustomDimension: boolean }) => {
+    dispatch(toggleCustomDimensionsAction(payload));
+  };
+
+  /**
+   *
+   * @param payload
+   */
   const toggleLiveMode = (payload: { value: boolean }) => {
     dispatch(toggleLiveModeAction(payload));
   };
@@ -114,18 +136,48 @@ export const useEditor = () => {
     dispatch(loadDataAction(payload));
   };
 
+  /**
+   *
+   * @param state
+   */
+  const saveToLocalStorage = (state: IEditorState) => {
+    localStorage.setItem('editor', JSON.stringify(state));
+  };
+
+  /**
+   *
+   * @returns
+   */
+  const getFromLocalStorage = (): IEditorState | null => {
+    const state = localStorage.getItem('editor');
+    return state ? JSON.parse(state) : null;
+  };
+
+  /**
+   *
+   */
+  const removeFromLocalStorage = () => {
+    localStorage.removeItem('editor');
+  };
+
   return {
     state: state as IEditorState,
+    editorStandartHeight: editorStandartHeight as number,
+    editorStandartWidth: editorStandartWidth as number,
     addElement,
     updateElement,
     deleteElement,
     clickElement,
     changeDevice,
     changeDimensions,
+    toggleCustomDimensions,
     toggleLiveMode,
     togglePreviewMode,
     redo,
     undo,
     loadData,
+    saveToLocalStorage,
+    getFromLocalStorage,
+    removeFromLocalStorage,
   };
 };

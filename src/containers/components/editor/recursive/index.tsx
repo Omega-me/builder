@@ -1,13 +1,13 @@
 import { IEditorElement } from '@/common/interfaces';
 import { ContainerComponent, TextComponent, VideoComponent } from '../..';
 import { eEditorBtns } from '@/common/enums';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../../ui/resizable';
+import { useState, useRef } from 'react';
 
-interface RecursiveProps {
+interface Props {
   element: IEditorElement;
 }
 
-const Recursive = (props: RecursiveProps) => {
+const Recursive = (props: Props) => {
   const { element } = props;
   switch (element.type) {
     case eEditorBtns.TEXT:

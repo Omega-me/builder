@@ -1,3 +1,4 @@
+export * from './global/treeview';
 export { default as ModeToggle } from './global/modetoggle';
 export { default as EditorNavigation } from './editor/editornavigation';
 export { default as EditorSidebar } from './editor/editorsidebar';
@@ -14,6 +15,6 @@ export { default as LinkPlaceholder } from './editor/placeholders/link';
 export { default as TextComponent } from './editor/components/text';
 export { default as ContainerComponent } from './editor/components/container';
 export { default as VideoComponent } from './editor/components/video';
-export { default as TreeComponents } from './editor/treecomponents/index';
 export { default as LayersTab } from './editor/layerstab';
-export * from './global/treeview';
+export { default as Typography } from './editor/typography';
+export { default as Resizable } from './global/resizable';

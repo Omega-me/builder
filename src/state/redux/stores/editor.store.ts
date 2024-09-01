@@ -23,6 +23,7 @@ const initialEditorState: IEditorState['editor'] = {
   device: eDeviceTypes.DESKTOP,
   previewMode: false,
   liveMode: false,
+  isCustomDimension: false,
 };
 
 const initialHistoryState: IHistoryState = {
@@ -74,6 +75,9 @@ const globalSlice = createSlice({
     changeDimensions: (state: IEditorState, { payload }: { payload: { dimensions?: IEditorDimensions } }) => {
       return new EditorReducer().changeDimensions(state, payload);
     },
+    toggleCustomDimensions: (state: IEditorState, { payload }: { payload: { isCustomDimension: boolean } }) => {
+      return new EditorReducer().toggleCustomDimensions(state, payload);
+    },
     togglePreviewMode: (state: IEditorState) => {
       return new EditorReducer().togglePreviewMode(state);
     },
@@ -109,6 +113,7 @@ export const {
   clickElement,
   changeDevice,
   changeDimensions,
+  toggleCustomDimensions,
   toggleLiveMode,
   togglePreviewMode,
   redo,

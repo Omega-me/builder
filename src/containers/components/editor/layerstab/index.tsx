@@ -3,11 +3,11 @@ import React from 'react';
 import { TreeView } from '../..';
 import { IEditorElement } from '@/common/interfaces';
 
-interface LayersTabProps {
+interface Props {
   elements: IEditorElement[];
 }
 
-const LayersTab = (props: LayersTabProps) => {
+const LayersTab = (props: Props) => {
   return <TreeView elements={props.elements} />;
 };
 

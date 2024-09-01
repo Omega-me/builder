@@ -4,7 +4,7 @@ import { addAnElement, deleteAnElement, updateAnElement } from '../actions/edito
 
 export class EditorReducer {
   public addElement = (state: IEditorState, payload: { containerId: string; elementDetails: IEditorElement }) => {
-    const updatedEditorState = {
+    const updatedEditorState: IEditorState['editor'] = {
       ...state.editor,
       elements: addAnElement(state.editor.elements, payload),
     };
@@ -14,7 +14,7 @@ export class EditorReducer {
       { ...updatedEditorState }, // Save a copy of the updated state
     ];
 
-    const newEditorState = {
+    const newEditorState: IEditorState = {
       ...state,
       editor: updatedEditorState,
       history: {
@@ -122,21 +122,51 @@ export class EditorReducer {
     return clickedState;
   };
   public changeDevice = (state: IEditorState, payload: { device: eDeviceTypes }) => {
-    const changedDeviceState = {
+    const editorDimensions: IEditorDimensions = {};
+    if (payload.device === eDeviceTypes.DESKTOP) {
+      editorDimensions.width = 100;
+    }
+    if (payload.device === eDeviceTypes.TABLET) {
+      editorDimensions.width = 850;
+    }
+    if (payload.device === eDeviceTypes.MOBILE) {
+      editorDimensions.width = 420;
+    }
+
+    const changedDeviceState: IEditorState = {
       ...state,
       editor: {
         ...state.editor,
         device: payload.device,
+        editorDimensions: {
+          height: state.editor.editorDimensions?.height,
+          width: editorDimensions.width,
+        },
+      },
+    };
+
+    return changedDeviceState;
+  };
+  public changeDimensions = (state: IEditorState, payload: { dimensions?: IEditorDimensions }) => {
+    const changedDeviceState: IEditorState = {
+      ...state,
+      editor: {
+        ...state.editor,
+        editorDimensions: {
+          height: payload.dimensions?.height ? payload.dimensions?.height : state.editor.editorDimensions?.height,
+          width: payload.dimensions?.width ? payload.dimensions?.width : state.editor.editorDimensions?.width,
+        },
       },
     };
     return changedDeviceState;
   };
-  public changeDimensions = (state: IEditorState, payload: { dimensions?: IEditorDimensions }) => {
-    const changedDeviceState = {
+  public toggleCustomDimensions = (state: IEditorState, payload: { isCustomDimension: boolean }) => {
+    const changedDeviceState: IEditorState = {
       ...state,
       editor: {
         ...state.editor,
-        editorDimensions: payload.dimensions,
+        isCustomDimension: payload.isCustomDimension,
+        device: eDeviceTypes.DESKTOP,
       },
     };
     return changedDeviceState;

@@ -22,13 +22,13 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Slider } from '../../ui/slider';
 import { IEditorState } from '@/common/interfaces';
 
-interface SettingsTabProps {
+interface Props {
   state: IEditorState;
   handleOnChanges: (e: any) => void;
   handleChangeCustomValues: (e: any) => void;
 }
 
-const SettingsTab = (props: SettingsTabProps) => {
+const SettingsTab = (props: Props) => {
   const { handleChangeCustomValues, handleOnChanges, state } = props;
 
   return (

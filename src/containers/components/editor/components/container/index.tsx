@@ -10,11 +10,11 @@ import Recursive from '../../recursive';
 import { Badge } from '@/containers/components/ui/badge';
 import { useEditor } from '@/hooks';
 
-interface ContainerComponentProps {
+interface Props {
   element: IEditorElement;
 }
 
-const ContainerComponent = ({ element }: ContainerComponentProps) => {
+const ContainerComponent = ({ element }: Props) => {
   const { id, content, styles, type } = element;
   const { state, addElement, clickElement, deleteElement } = useEditor();
 
@@ -144,7 +144,7 @@ const ContainerComponent = ({ element }: ContainerComponentProps) => {
         'overflow-scroll ': type === eEditorBtns.BODY,
         'flex flex-col md:!flex-row': type === eEditorBtns.TWO_COL,
         '!border-blue-500': state.editor.selectedElement.id === id && !state.editor.liveMode && state.editor.selectedElement.type !== eEditorBtns.BODY,
-        '!border-yellow-400 !border-4':
+        '!border-yellow-400 !border-3':
           state.editor.selectedElement.id === id && !state.editor.liveMode && state.editor.selectedElement.type === eEditorBtns.BODY,
         '!border-solid': state.editor.selectedElement.id === id && !state.editor.liveMode,
         'border-dashed border-[1px] border-slate-300': !state.editor.liveMode,
@@ -161,7 +161,7 @@ const ContainerComponent = ({ element }: ContainerComponentProps) => {
         {element.name}
       </Badge>
 
-      {Array.isArray(content) && content.map(childElement => <Recursive key={childElement.id} element={childElement} />)}
+      {Array.isArray(content) && content.map((childElement: IEditorElement) => <Recursive key={childElement.id} element={childElement} />)}
 
       {state.editor.selectedElement.id === element.id && !state.editor.liveMode && state.editor.selectedElement.type !== eEditorBtns.BODY && (
         <div

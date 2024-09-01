@@ -2,11 +2,10 @@
 import { EditorNavigation } from '@/containers/components';
 import { useEditor } from '@/hooks';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import React, { useState } from 'react';
+import React from 'react';
 
 const EditorNavigationModule = () => {
-  const { state, toggleLiveMode, togglePreviewMode, undo, redo, changeDevice, changeDimensions } = useEditor();
-  const [customEditorSize, setCustomEditorSize] = useState(false);
+  const { editorStandartHeight, state, toggleLiveMode, togglePreviewMode, undo, redo, changeDevice, changeDimensions, toggleCustomDimensions } = useEditor();
 
   const handlePreviewClick = () => {
     togglePreviewMode();
@@ -14,22 +13,24 @@ const EditorNavigationModule = () => {
   };
 
   const handleContainerCustomSize = (e: CheckedState) => {
-    setCustomEditorSize(e as boolean);
+    toggleCustomDimensions({ isCustomDimension: e as boolean });
     changeDimensions({
-      dimensions: undefined,
+      dimensions: {
+        height: editorStandartHeight,
+      },
     });
   };
 
   return (
     <EditorNavigation
       state={state}
-      customEditorSize={customEditorSize}
       changeDevice={changeDevice}
       changeDimensions={changeDimensions}
       handleContainerCustomSize={handleContainerCustomSize}
       handlePreviewClick={handlePreviewClick}
       redo={redo}
       undo={undo}
+      toggleCustomDimensions={toggleCustomDimensions}
     />
   );
 };

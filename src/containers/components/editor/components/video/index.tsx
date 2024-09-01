@@ -7,11 +7,11 @@ import clsx from 'clsx';
 import { Trash } from 'lucide-react';
 import React from 'react';
 
-interface VideoComponentProps {
+interface Props {
   element: IEditorElement;
 }
 
-const VideoComponent = (props: VideoComponentProps) => {
+const VideoComponent = (props: Props) => {
   const { state, deleteElement, clickElement } = useEditor();
   const styles = props.element.styles;
 

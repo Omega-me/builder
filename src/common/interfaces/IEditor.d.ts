@@ -22,8 +22,8 @@ export interface IEditorElement {
 }
 
 export interface IEditorDimensions {
-  width?: string;
-  height?: string;
+  width?: number;
+  height?: number;
 }
 
 export interface IEditor {
@@ -33,6 +33,7 @@ export interface IEditor {
   device: eDeviceTypes;
   previewMode: boolean;
   editorDimensions?: IEditorDimensions;
+  isCustomDimension: boolean;
 }
 
 export interface IHistoryState {
