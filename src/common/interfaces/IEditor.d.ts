@@ -45,3 +45,12 @@ export interface IEditorState {
   editor: IEditor;
   history: IHistoryState;
 }
+
+export interface IEditorSidebarProps {
+  state: IEditorState;
+  editorStandartHeight: number;
+  stylings: {
+    handleOnChanges: (e: any) => void;
+    handleChangeCustomValues: (e: any) => void;
+  };
+}

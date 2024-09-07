@@ -22,7 +22,7 @@ export const useEditor = () => {
   const dim = useWindowDimensions();
   const state = useAppSelector(s => s.editor);
   const [editorStandartHeight, setEditorStandartHeight] = useState((dim?.height as number) - 100);
-  const editorStandartWidth = dim?.width;
+  const [editorStandartWidth, setEditorStandartWidth] = useState(dim?.width as number);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -31,7 +31,8 @@ export const useEditor = () => {
     } else {
       setEditorStandartHeight((dim?.height as number) - 100);
     }
-  }, [state.editor.isCustomDimension]);
+    setEditorStandartWidth(dim?.width as number);
+  }, [state.editor.isCustomDimension, dim?.height, dim?.width]);
 
   /**
    *

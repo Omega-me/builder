@@ -18,3 +18,4 @@ export { default as VideoComponent } from './editor/components/video';
 export { default as LayersTab } from './editor/layerstab';
 export { default as Typography } from './editor/typography';
 export { default as Resizable } from './global/resizable';
+export { default as CtxMenu } from './editor/components/contextmenu';

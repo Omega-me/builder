@@ -1,7 +1,8 @@
+'use client';
+
 import { eDeviceSize, eDeviceTypes } from '@/common/enums';
-import { useEditor, useMediaQuery } from '@/hooks';
+import { useEditor } from '@/hooks';
 import clsx from 'clsx';
-import { ChevronsLeftRight } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
@@ -10,25 +11,11 @@ interface Props {
 
 const Resizable = (props: Props) => {
   const { state, changeDimensions, editorStandartHeight, editorStandartWidth } = useEditor();
-  const [editorWidth, setEditorWidth] = useState<number>(editorStandartWidth);
-  const [editorHeight, setEditorHeight] = useState<number>(editorStandartHeight);
+  const [style, setStyle] = useState({
+    width: '100vw',
+    height: '100vh',
+  });
   const editorRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    changeDimensions({
-      dimensions: {
-        height: editorStandartHeight,
-        width: editorStandartWidth,
-      },
-    });
-  }, [editorStandartHeight, editorStandartWidth]);
-
-  useEffect(() => {
-    if (!state.editor.isCustomDimension) {
-      setEditorWidth(editorStandartWidth);
-      setEditorHeight(editorStandartHeight);
-    }
-  }, [state.editor.isCustomDimension]);
 
   const createHeight = (height: number) => {
     if (!state.editor.isCustomDimension) {
@@ -37,12 +24,7 @@ const Resizable = (props: Props) => {
       }
       return editorStandartHeight + 'px';
     }
-    if (state.editor.liveMode || state.editor.previewMode) {
-      if (height >= editorStandartHeight - 50) {
-        return '100vh';
-      }
-      return height + 'px';
-    }
+
     return height + 'px';
   };
 
@@ -62,6 +44,25 @@ const Resizable = (props: Props) => {
     return width + 'px';
   };
 
+  useEffect(() => {
+    setStyle({
+      ...style,
+      height: createHeight(editorStandartHeight),
+      width: createWidth(editorStandartWidth),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorStandartHeight, editorStandartWidth, state.editor.device]);
+
+  useEffect(() => {
+    if (!state.editor.isCustomDimension) {
+      setStyle({
+        ...style,
+        height: createHeight(editorStandartHeight),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.editor.liveMode, state.editor.previewMode, state.editor.isCustomDimension]);
+
   const rsXMouseDownHandler = (e: any) => {
     const x = e.clientX;
     const cWidth = window.getComputedStyle((editorRef as any).current).width;
@@ -73,7 +74,10 @@ const Resizable = (props: Props) => {
       const newWidth = initialWidth + dx;
 
       if (newWidth >= 300) {
-        setEditorWidth(newWidth);
+        setStyle({
+          ...style,
+          width: createWidth(newWidth),
+        });
       }
     };
 
@@ -97,11 +101,17 @@ const Resizable = (props: Props) => {
       const newHeight = initialHeight + dy;
 
       if (newHeight >= 400) {
-        setEditorHeight(newHeight);
+        setStyle({
+          ...style,
+          height: createHeight(newHeight),
+        });
       }
       if (newHeight >= editorStandartHeight - 50) {
         // add snap to standart height
-        setEditorHeight(editorStandartHeight);
+        setStyle({
+          ...style,
+          height: createHeight(editorStandartHeight),
+        });
       }
     };
 
@@ -127,20 +137,20 @@ const Resizable = (props: Props) => {
       let dx: any = x - e.clientX;
       dx = e.clientX - x;
       const newWidth = initialWidth + dx;
-      if (newWidth >= 300) {
-        setEditorWidth(newWidth);
-      }
-
       let dy: any = y - e.clientY;
       dy = e.clientY - y;
       const newHeight = initialHeight + dy;
-      if (newHeight >= 400) {
-        setEditorHeight(newHeight);
-      }
-      if (newHeight >= editorStandartHeight - 50) {
-        // add snap to standart height
-        setEditorHeight(editorStandartHeight);
-      }
+
+      setStyle({
+        ...style,
+        width: newWidth >= 300 ? createWidth(newWidth) : '300px',
+        height:
+          newHeight >= 400 && newHeight < editorStandartHeight - 20
+            ? createHeight(newHeight)
+            : newHeight >= editorStandartHeight - 20
+            ? createHeight(editorStandartHeight)
+            : '400px',
+      });
     };
 
     const mouseUpHandler = () => {
@@ -152,13 +162,6 @@ const Resizable = (props: Props) => {
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  const notMobile = useMediaQuery({
-    query(width, height) {
-      return width > 500;
-    },
-    ref: editorRef,
-  });
-
   return (
     <div>
       <div className="flex">
@@ -167,54 +170,58 @@ const Resizable = (props: Props) => {
             'transition-all': !state.editor.isCustomDimension,
           })}
           ref={editorRef}
-          style={{
-            width: createWidth(editorWidth),
-            height: createHeight(editorHeight),
-            // background: notMobile ? 'red' : 'blue'
-          }}>
+          style={{ ...style }}>
           {props.children}
         </div>
         {state.editor.isCustomDimension && (!state.editor.liveMode || !state.editor.previewMode) && (
           <div
-            className="resizer w-2 bg-white flex justify-center items-center opacity-30 rounded-tr-sm ml-1"
+            className="relative ml-1 mr-2 w-1 border-r-[1px] border-white"
             onMouseUp={() => {
               changeDimensions({
                 dimensions: {
                   ...state.editor.editorDimensions,
-                  width: editorWidth,
+                  width: parseInt(style.width, 10),
                 },
               });
             }}
             onMouseDown={rsXMouseDownHandler}
-            style={{ cursor: 'ew-resize' }}></div>
+            style={{ cursor: 'ew-resize' }}>
+            <div className="w-1 h-1 bg-white absolute left-[50%]"></div>
+          </div>
         )}
       </div>
+
       {state.editor.isCustomDimension && (!state.editor.liveMode || !state.editor.previewMode) && (
         <div className="flex">
           <div
-            className="resizer h-2 bg-white opacity-30 rounded-bl-sm mt-1"
+            className="relative mt-1 h-1 border-b-[1px] border-white"
             onMouseUp={() => {
               changeDimensions({
                 dimensions: {
                   ...state.editor.editorDimensions,
-                  height: editorHeight,
+                  height: parseInt(style.height, 10),
                 },
               });
             }}
             onMouseDown={rsYMouseDownHandler}
-            style={{ cursor: 'n-resize', width: `${editorWidth}px` }}></div>
+            style={{ cursor: 'n-resize', width: style.width }}>
+            <div className="w-1 h-1 bg-white absolute left-0 top-[50%]"></div>
+          </div>
+
           <div
-            className="resizer h-2 w-2 bg-white opacity-30 rounded-br-sm mt-1 ml-1"
+            className="relative h-2 w-2 mt-1 ml-1 mr-1 border-white  border-[1px]"
             onMouseUp={() => {
               changeDimensions({
                 dimensions: {
-                  width: editorWidth,
-                  height: editorHeight,
+                  width: parseInt(style.width, 10),
+                  height: parseInt(style.height, 10),
                 },
               });
             }}
             onMouseDown={rsXYMouseDownHandler}
-            style={{ cursor: 'nw-resize' }}></div>
+            style={{ cursor: 'nw-resize' }}>
+            <div className="absolute w-1 h-1 bg-white"></div>
+          </div>
         </div>
       )}
     </div>

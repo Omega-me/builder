@@ -2,6 +2,7 @@ import { eDeviceTypes, eEditorBtns } from '@/common/enums';
 import { IEditorDimensions, IEditorElement, IEditorState, IHistoryState } from '@/common/interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { EditorReducer } from '../reducers/editor.reducer';
+import { getWindowDimensions } from '@/common/lib/utils';
 
 const initialEditorState: IEditorState['editor'] = {
   elements: [
@@ -24,6 +25,10 @@ const initialEditorState: IEditorState['editor'] = {
   previewMode: false,
   liveMode: false,
   isCustomDimension: false,
+  editorDimensions: {
+    height: getWindowDimensions() && getWindowDimensions()?.height,
+    width: getWindowDimensions() && getWindowDimensions()?.width,
+  },
 };
 
 const initialHistoryState: IHistoryState = {

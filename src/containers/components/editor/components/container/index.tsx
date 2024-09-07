@@ -1,6 +1,6 @@
 'use client';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { v4 } from 'uuid';
 import { Trash } from 'lucide-react';
 import { IEditorElement } from '@/common/interfaces';
@@ -9,14 +9,22 @@ import { defaultStyles } from '@/common/configs';
 import Recursive from '../../recursive';
 import { Badge } from '@/containers/components/ui/badge';
 import { useEditor } from '@/hooks';
+import CtxMenu from '../contextmenu';
 
 interface Props {
   element: IEditorElement;
 }
 
+const initialCtxMenu = {
+  show: false,
+  x: 0,
+  y: 0,
+};
+
 const ContainerComponent = ({ element }: Props) => {
   const { id, content, styles, type } = element;
   const { state, addElement, clickElement, deleteElement } = useEditor();
+  const [ctxMenu, setCtxMenu] = useState(initialCtxMenu);
 
   const handleOnDrop = (e: React.DragEvent, id: string) => {
     e.stopPropagation();
@@ -134,8 +142,28 @@ const ContainerComponent = ({ element }: Props) => {
     });
   };
 
+  const handleCtxMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { pageX, pageY } = e;
+    setCtxMenu({
+      show: !ctxMenu.show,
+      x: pageX,
+      y: pageY,
+    });
+  };
+
+  const handleCloseCtxMenu = () => {
+    setCtxMenu({
+      show: false,
+      x: 0,
+      y: 0,
+    });
+  };
+
   return (
     <div
+      onContextMenu={handleCtxMenu}
       style={styles}
       className={clsx('relative p-4 transition-all group', {
         'max-w-full w-full': type === eEditorBtns.CONTAINER || type === eEditorBtns.TWO_COL,
@@ -160,7 +188,6 @@ const ContainerComponent = ({ element }: Props) => {
         })}>
         {element.name}
       </Badge>
-
       {Array.isArray(content) && content.map((childElement: IEditorElement) => <Recursive key={childElement.id} element={childElement} />)}
 
       {state.editor.selectedElement.id === element.id && !state.editor.liveMode && state.editor.selectedElement.type !== eEditorBtns.BODY && (
@@ -170,6 +197,7 @@ const ContainerComponent = ({ element }: Props) => {
           <Trash size={16} />
         </div>
       )}
+      {ctxMenu.show && <CtxMenu x={ctxMenu.x} y={ctxMenu.y} closeCtx={handleCloseCtxMenu} />}
     </div>
   );
 };

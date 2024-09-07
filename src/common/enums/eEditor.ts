@@ -25,6 +25,13 @@ export enum eComponentsGroup {
   LAYOUT = 'layout',
   ELEMENTS = 'elements',
 }
+export enum eSideBarTabs {
+  STYLINGS = 'Stylings',
+  COMPONENTS = 'Components',
+  LAYERS = 'Layers',
+  MEDIA = 'Media',
+  SETTINGS = 'Settings',
+}
 
 // Editor CSS
 export enum eBoxSizing {

@@ -1,24 +1,20 @@
-import { Database, Plus, SettingsIcon, SquareStackIcon } from 'lucide-react';
 import { TabsList, TabsTrigger } from '../../ui/tabs';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../../ui/tooltip';
+import { sidebarTabs } from '@/common/configs';
 
-const TabList = () => {
-  return (
-    <TabsList className=" flex items-center flex-col justify-evenly w-full bg-transparent h-fit gap-4 ">
-      <TabsTrigger value="Settings" className="w-10 h-10 p-0 data-[state=active]:bg-muted">
-        <SettingsIcon />
+const TabList = () => (
+  <TabsList className=" flex items-center flex-col justify-evenly w-full bg-transparent h-fit gap-4 ">
+    {sidebarTabs.map(s => (
+      <TabsTrigger key={s.id} value={s.value} className="w-10 h-10 p-0 data-[state=active]:bg-muted">
+        <Tooltip>
+          <TooltipTrigger asChild>{s.Icon()}</TooltipTrigger>
+          <TooltipContent side="left">
+            <p>{s.value}</p>
+          </TooltipContent>
+        </Tooltip>
       </TabsTrigger>
-      <TabsTrigger value="Components" className="data-[state=active]:bg-muted w-10 h-10 p-0">
-        <Plus />
-      </TabsTrigger>
-
-      <TabsTrigger value="Layers" className="w-10 h-10 p-0 data-[state=active]:bg-muted">
-        <SquareStackIcon />
-      </TabsTrigger>
-      <TabsTrigger value="Media" className="w-10 h-10 p-0 data-[state=active]:bg-muted">
-        <Database />
-      </TabsTrigger>
-    </TabsList>
-  );
-};
+    ))}
+  </TabsList>
+);
 
 export default TabList;

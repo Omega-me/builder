@@ -32,11 +32,11 @@ const SettingsTab = (props: Props) => {
   const { handleChangeCustomValues, handleOnChanges, state } = props;
 
   return (
-    <Accordion type="multiple" className="w-full" defaultValue={['Typography', 'Dimensions', 'Decorations', 'Flexbox']}>
+    <Accordion type="multiple" defaultValue={['Typography', 'Dimensions', 'Decorations', 'Flexbox']}>
       <AccordionItem value="Custom" className="px-6 py-0  ">
         <AccordionTrigger className="!no-underline">Custom</AccordionTrigger>
         <AccordionContent>
-          {state.editor.selectedElement.type === 'link' && !Array.isArray(state.editor.selectedElement.content) && (
+          {state.editor.selectedElement.type === 'video' && !Array.isArray(state.editor.selectedElement.content) && (
             <div className="flex flex-col gap-2">
               <p className="text-muted-foreground">Link Path</p>
               <Input
