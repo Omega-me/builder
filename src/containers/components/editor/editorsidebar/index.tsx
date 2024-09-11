@@ -23,7 +23,7 @@ const EditorSidebar = (props: IEditorSidebarProps) => {
         <SheetContent
           side="right"
           removeCloseBtn={true}
-          className={clsx('mt-[99px] w-80 mr-16 z-[80] shadow-none p-0 transition-all overflow-scroll', {
+          className={clsx('mt-[99px] w-80 mr-16 z-[40] shadow-none p-0 transition-all overflow-scroll', {
             hidden: state.editor.previewMode,
           })}>
           {sidebarTabs.map(s => (

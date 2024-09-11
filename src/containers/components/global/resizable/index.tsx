@@ -3,10 +3,12 @@
 import { eDeviceSize, eDeviceTypes } from '@/common/enums';
 import { useEditor } from '@/hooks';
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import { GripHorizontal, GripVertical } from 'lucide-react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 interface Props {
   children: React.ReactNode;
+  setParentCursor: Dispatch<SetStateAction<string>>;
 }
 
 const Resizable = (props: Props) => {
@@ -15,6 +17,7 @@ const Resizable = (props: Props) => {
     width: '100vw',
     height: '100vh',
   });
+  const [cursor, setCursor] = useState('default');
   const editorRef = useRef<HTMLDivElement>(null);
 
   const createHeight = (height: number) => {
@@ -63,7 +66,18 @@ const Resizable = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.editor.liveMode, state.editor.previewMode, state.editor.isCustomDimension]);
 
+  const handleChangeCursorStyle = (type?: string) => {
+    if (type) {
+      setCursor(type);
+      props.setParentCursor(type);
+    } else {
+      setCursor('default');
+      props.setParentCursor('default');
+    }
+  };
+
   const rsXMouseDownHandler = (e: any) => {
+    handleChangeCursorStyle('col-resize');
     const x = e.clientX;
     const cWidth = window.getComputedStyle((editorRef as any).current).width;
     const initialWidth = parseInt(cWidth, 10);
@@ -82,6 +96,13 @@ const Resizable = (props: Props) => {
     };
 
     const mouseUpHandler = () => {
+      handleChangeCursorStyle();
+      changeDimensions({
+        dimensions: {
+          ...state.editor.editorDimensions,
+          width: parseInt(style.width, 10),
+        },
+      });
       document.removeEventListener('mouseup', mouseUpHandler);
       document.removeEventListener('mousemove', mouseMoveHandler);
     };
@@ -91,6 +112,7 @@ const Resizable = (props: Props) => {
   };
 
   const rsYMouseDownHandler = (e: any) => {
+    handleChangeCursorStyle('row-resize');
     const y = e.clientY;
     const cHeight = window.getComputedStyle((editorRef as any).current).height;
     const initialHeight = parseInt(cHeight, 10);
@@ -116,6 +138,13 @@ const Resizable = (props: Props) => {
     };
 
     const mouseUpHandler = () => {
+      handleChangeCursorStyle();
+      changeDimensions({
+        dimensions: {
+          ...state.editor.editorDimensions,
+          height: parseInt(style.height, 10),
+        },
+      });
       document.removeEventListener('mouseup', mouseUpHandler);
       document.removeEventListener('mousemove', mouseMoveHandler);
     };
@@ -125,6 +154,7 @@ const Resizable = (props: Props) => {
   };
 
   const rsXYMouseDownHandler = (e: any) => {
+    handleChangeCursorStyle('nwse-resize');
     const x = e.clientX;
     const cWidth = window.getComputedStyle((editorRef as any).current).width;
     const initialWidth = parseInt(cWidth, 10);
@@ -154,6 +184,13 @@ const Resizable = (props: Props) => {
     };
 
     const mouseUpHandler = () => {
+      handleChangeCursorStyle();
+      changeDimensions({
+        dimensions: {
+          width: parseInt(style.width, 10),
+          height: parseInt(style.height, 10),
+        },
+      });
       document.removeEventListener('mouseup', mouseUpHandler);
       document.removeEventListener('mousemove', mouseMoveHandler);
     };
@@ -170,56 +207,29 @@ const Resizable = (props: Props) => {
             'transition-all': !state.editor.isCustomDimension,
           })}
           ref={editorRef}
-          style={{ ...style }}>
+          style={{ ...style, cursor }}>
           {props.children}
         </div>
         {state.editor.isCustomDimension && (!state.editor.liveMode || !state.editor.previewMode) && (
-          <div
-            className="relative ml-1 mr-2 w-1 border-r-[1px] border-white"
-            onMouseUp={() => {
-              changeDimensions({
-                dimensions: {
-                  ...state.editor.editorDimensions,
-                  width: parseInt(style.width, 10),
-                },
-              });
-            }}
-            onMouseDown={rsXMouseDownHandler}
-            style={{ cursor: 'ew-resize' }}>
+          <div className="relative ml-1 mr-2 w-1 border-r-[1px] border-white" onMouseDown={rsXMouseDownHandler} style={{ cursor: 'col-resize' }}>
             <div className="w-1 h-1 bg-white absolute left-[50%]"></div>
+            <div className="w-2 h-10 bg-white rounded-md absolute top-[50%] -translate-y-[50%] flex justify-center items-center">
+              <GripVertical className="text-black" />
+            </div>
           </div>
         )}
       </div>
 
       {state.editor.isCustomDimension && (!state.editor.liveMode || !state.editor.previewMode) && (
         <div className="flex">
-          <div
-            className="relative mt-1 h-1 border-b-[1px] border-white"
-            onMouseUp={() => {
-              changeDimensions({
-                dimensions: {
-                  ...state.editor.editorDimensions,
-                  height: parseInt(style.height, 10),
-                },
-              });
-            }}
-            onMouseDown={rsYMouseDownHandler}
-            style={{ cursor: 'n-resize', width: style.width }}>
+          <div className="relative mt-1 h-1 border-b-[1px] border-white" onMouseDown={rsYMouseDownHandler} style={{ cursor: 'row-resize', width: style.width }}>
             <div className="w-1 h-1 bg-white absolute left-0 top-[50%]"></div>
+            <div className="h-2 w-10 bg-white rounded-md absolute left-[50%] -translate-x-[50%] flex justify-center items-center">
+              <GripHorizontal size={12} className="text-black" />
+            </div>
           </div>
 
-          <div
-            className="relative h-2 w-2 mt-1 ml-1 mr-1 border-white  border-[1px]"
-            onMouseUp={() => {
-              changeDimensions({
-                dimensions: {
-                  width: parseInt(style.width, 10),
-                  height: parseInt(style.height, 10),
-                },
-              });
-            }}
-            onMouseDown={rsXYMouseDownHandler}
-            style={{ cursor: 'nw-resize' }}>
+          <div className="relative h-2 w-2 mt-1 ml-1 mr-1 border-white  border-[1px]" onMouseDown={rsXYMouseDownHandler} style={{ cursor: 'nw-resize' }}>
             <div className="absolute w-1 h-1 bg-white"></div>
           </div>
         </div>

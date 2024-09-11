@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useEditor } from '@/hooks';
 import { Editor } from '@/containers/components';
 
@@ -10,6 +10,7 @@ interface Props {
 const EditorModule = (props: Props) => {
   const { liveMode } = props;
   const { state, toggleLiveMode, clickElement, togglePreviewMode } = useEditor();
+  const [cursor, setCursor] = useState('default');
 
   useEffect(() => {
     if (liveMode) {
@@ -27,7 +28,9 @@ const EditorModule = (props: Props) => {
     togglePreviewMode();
   };
 
-  return <Editor state={state} toggleLiveMode={toggleLiveMode} handleClick={handleClick} handleUnpreview={handleUnpreview} />;
+  return (
+    <Editor state={state} toggleLiveMode={toggleLiveMode} handleClick={handleClick} handleUnpreview={handleUnpreview} cursor={cursor} setCursor={setCursor} />
+  );
 };
 
 export default EditorModule;
