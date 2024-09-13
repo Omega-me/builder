@@ -1,6 +1,7 @@
 import { eDeviceTypes } from '@/common/enums';
 import { IEditorState, IEditorElement, IEditorDimensions } from '@/common/interfaces';
 import { addAnElement, deleteAnElement, updateAnElement } from '../actions/editor.action';
+import { defaultElement } from '@/common/configs';
 
 export class EditorReducer {
   public addElement = (state: IEditorState, payload: { containerId: string; elementDetails: IEditorElement }) => {
@@ -42,6 +43,7 @@ export class EditorReducer {
             content: [],
             name: '',
             styles: {},
+            mediaQuery: {},
             type: null,
           },
     };
@@ -94,6 +96,7 @@ export class EditorReducer {
             content: [];
             name: '';
             styles: {};
+            mediaQuery: {};
             type: null;
           };
     },
@@ -107,6 +110,7 @@ export class EditorReducer {
           content: [],
           name: '',
           styles: {},
+          mediaQuery: {},
           type: null,
         },
       },
@@ -223,8 +227,20 @@ export class EditorReducer {
     }
     return state;
   };
+  public refresh = (state: IEditorState) => {
+    const refreshedState: IEditorState = {
+      ...state,
+      editor: {
+        ...state.editor,
+        selectedElement: defaultElement,
+        device: eDeviceTypes.DESKTOP,
+        isCustomDimension: false,
+      },
+    };
+    return refreshedState;
+  };
   public loadData = (
-    state: IEditorState,
+    _state: IEditorState,
     initialState: IEditorState,
     initialEditorState: IEditorState['editor'],
     payload: {

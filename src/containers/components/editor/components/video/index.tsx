@@ -31,6 +31,7 @@ const VideoComponent = (props: Props) => {
 
   return (
     <div
+      // TODO: Include media query
       style={styles}
       draggable
       onDragStart={e => handleDragStart(e, eEditorBtns.VIDEO)}

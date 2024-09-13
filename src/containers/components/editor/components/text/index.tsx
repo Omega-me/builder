@@ -16,6 +16,7 @@ const TextComponent = (props: Props) => {
   const handleDeleteElement = () => {
     deleteElement({ elementDetails: props.element });
   };
+  //TODO: Include media query too
   const styles = props.element.styles;
 
   const handleOnClickBody = (e: React.MouseEvent) => {

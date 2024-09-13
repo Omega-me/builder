@@ -13,6 +13,7 @@ import {
   togglePreviewMode as togglePreviewModeAction,
   redo as redoAction,
   undo as undoAction,
+  refresh as refreshAction,
   loadData as loadDataAction,
 } from '@/state/redux/stores/editor.store';
 import { useWindowDimensions } from '../useWindowDimensions';
@@ -70,6 +71,7 @@ export const useEditor = () => {
           content: [];
           name: '';
           styles: {};
+          mediaQuery: {};
           type: null;
         };
   }) => {
@@ -131,6 +133,13 @@ export const useEditor = () => {
 
   /**
    *
+   */
+  const refresh = () => {
+    dispatch(refreshAction());
+  };
+
+  /**
+   *
    * @param payload
    */
   const loadData = (payload: { elements: IEditorElement[]; withLive: boolean }) => {
@@ -176,6 +185,7 @@ export const useEditor = () => {
     togglePreviewMode,
     redo,
     undo,
+    refresh,
     loadData,
     saveToLocalStorage,
     getFromLocalStorage,

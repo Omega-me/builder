@@ -1,10 +1,10 @@
-import { Database, Plus, Settings, SquareStackIcon, SwatchBook } from 'lucide-react';
+import { Database, MousePointerClick, Plus, Settings, SquareStackIcon, SwatchBook } from 'lucide-react';
 import { eSideBarTabs } from '../enums';
-import { ComponentsTab, LayersTab, SettingsTab } from '@/containers/components';
-import { Carousel, CarouselContent, CarouselItem } from '@/containers/components/ui/carousel';
-import { SheetHeader, SheetTitle, SheetDescription, SheetContent } from '@/containers/components/ui/sheet';
-import { TabsContent } from '@/containers/components/ui/tabs';
+import { ComponentsTab, LayersTab, MediaQuery, SettingsTab } from '@/containers/components';
+import { SheetHeader, SheetTitle, SheetDescription } from '@/containers/components/ui/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/containers/components/ui/tabs';
 import { IEditorSidebarProps } from '../interfaces';
+import { Alert, AlertDescription, AlertTitle } from '@/containers/components/ui/alert';
 
 export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.ReactNode; content: (props: IEditorSidebarProps) => React.ReactNode }[] = [
   {
@@ -13,31 +13,43 @@ export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.R
     value: eSideBarTabs.STYLINGS,
     content: (props: IEditorSidebarProps) => (
       <TabsContent value={eSideBarTabs.STYLINGS}>
-        <SheetHeader className="text-left p-6">
+        <SheetHeader id="styling_header" className="text-left p-6">
           <SheetTitle>{eSideBarTabs.STYLINGS}</SheetTitle>
           <SheetDescription>Show your creativity! You can customize every component as you like.</SheetDescription>
         </SheetHeader>
 
-        <Carousel>
-          <CarouselContent>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index}>
-                {/* TODO: Each settings tab will have styling config based on media queries */}
-                <div
-                  style={{
-                    height: props.editorStandartHeight - 130 + 'px',
-                  }}
-                  className="overflow-scroll pb-5">
-                  <SettingsTab
-                    handleChangeCustomValues={props.stylings.handleChangeCustomValues}
-                    handleOnChanges={props.stylings.handleOnChanges}
-                    state={props.state}
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <Tabs defaultValue="default">
+          <TabsList className="sticky top-2 z-50 ml-2 grid w-[95%] grid-cols-2">
+            <TabsTrigger value="default">Default</TabsTrigger>
+            <TabsTrigger value="media_query">Media Query</TabsTrigger>
+          </TabsList>
+
+          {props.state.editor.selectedElement.id.trim() === '' ? (
+            <Alert className="ml-2 mt-4 w-[95%]">
+              <MousePointerClick className="h-4 w-4" />
+              <AlertTitle>No element selected</AlertTitle>
+              <AlertDescription className="text-muted-foreground">Click an element on the editor to start editing</AlertDescription>
+            </Alert>
+          ) : (
+            <>
+              <TabsContent value="default">
+                <SettingsTab
+                  handleChangeCustomValues={props.stylings.handleChangeCustomValues}
+                  handleOnChanges={props.stylings.handleOnChanges}
+                  state={props.state}
+                />
+              </TabsContent>
+
+              <TabsContent value="media_query">
+                <MediaQuery
+                  handleChangeCustomValues={props.stylings.handleChangeCustomValues}
+                  handleOnChanges={props.stylings.handleOnChanges}
+                  state={props.state}
+                />
+              </TabsContent>
+            </>
+          )}
+        </Tabs>
       </TabsContent>
     ),
   },

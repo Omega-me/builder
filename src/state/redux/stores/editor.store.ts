@@ -11,6 +11,7 @@ const initialEditorState: IEditorState['editor'] = {
       id: '__body',
       name: 'Body',
       styles: {},
+      mediaQuery: {},
       type: eEditorBtns.BODY,
     },
   ],
@@ -19,6 +20,7 @@ const initialEditorState: IEditorState['editor'] = {
     content: [],
     name: '',
     styles: {},
+    mediaQuery: {},
     type: null,
   },
   device: eDeviceTypes.DESKTOP,
@@ -67,6 +69,7 @@ const globalSlice = createSlice({
                 content: [];
                 name: '';
                 styles: {};
+                mediaQuery: {};
                 type: null;
               };
         };
@@ -94,6 +97,9 @@ const globalSlice = createSlice({
     },
     undo: (state: IEditorState) => {
       return new EditorReducer().undo(state);
+    },
+    refresh: (state: IEditorState) => {
+      return new EditorReducer().refresh(state);
     },
     loadData: (
       state: IEditorState,
@@ -123,6 +129,7 @@ export const {
   togglePreviewMode,
   redo,
   undo,
+  refresh,
   loadData,
 } = globalSlice.actions;
 export default globalSlice.reducer;

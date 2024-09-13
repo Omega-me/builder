@@ -1,13 +1,12 @@
 import { IEditorElement } from '@/common/interfaces';
 import { ContainerComponent, TextComponent, VideoComponent } from '../..';
 import { eEditorBtns } from '@/common/enums';
-import { useState, useRef } from 'react';
 
 interface Props {
   element: IEditorElement;
 }
 
-const Recursive = (props: Props) => {
+const Recursive: React.FC<Props> = props => {
   const { element } = props;
   switch (element.type) {
     case eEditorBtns.TEXT:

@@ -5,7 +5,8 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import React from 'react';
 
 const EditorNavigationModule = () => {
-  const { editorStandartHeight, state, toggleLiveMode, togglePreviewMode, undo, redo, changeDevice, changeDimensions, toggleCustomDimensions } = useEditor();
+  const { editorStandartHeight, state, toggleLiveMode, togglePreviewMode, undo, redo, changeDevice, changeDimensions, toggleCustomDimensions, refresh } =
+    useEditor();
 
   const handlePreviewClick = () => {
     togglePreviewMode();
@@ -30,6 +31,7 @@ const EditorNavigationModule = () => {
       handlePreviewClick={handlePreviewClick}
       redo={redo}
       undo={undo}
+      refresh={refresh}
       toggleCustomDimensions={toggleCustomDimensions}
     />
   );

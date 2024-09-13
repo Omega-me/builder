@@ -2,7 +2,7 @@
 import clsx from 'clsx';
 import { EyeOff } from 'lucide-react';
 import { Button } from '../ui/button';
-import { Recursive, Resizable } from '..';
+import { EditorSizing, Recursive, Resizable } from '..';
 import { IEditorElement, IEditorState } from '@/common/interfaces';
 import { Dispatch, SetStateAction, useState } from 'react';
 

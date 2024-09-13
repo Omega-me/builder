@@ -7,8 +7,8 @@ import { IEditorSidebarProps } from '@/common/interfaces';
 import { eSideBarTabs } from '@/common/enums';
 import { sidebarTabs } from '@/common/configs';
 
-const EditorSidebar = (props: IEditorSidebarProps) => {
-  const { state } = props;
+const EditorSidebar: React.FC<IEditorSidebarProps> = props => {
+  const { state, editorStandartHeight } = props;
   return (
     <Sheet open={true} modal={false}>
       <Tabs defaultValue={eSideBarTabs.STYLINGS}>
@@ -18,12 +18,15 @@ const EditorSidebar = (props: IEditorSidebarProps) => {
           className={clsx('mt-[99px] w-16 z-[80] shadow-none p-0 transition-all overflow-scroll', {
             hidden: state.editor.previewMode,
           })}>
-          <TabList />
+          <TabList editorStandartHeight={editorStandartHeight} />
         </SheetContent>
         <SheetContent
           side="right"
           removeCloseBtn={true}
-          className={clsx('mt-[99px] w-80 mr-16 z-[40] shadow-none p-0 transition-all overflow-scroll', {
+          style={{
+            height: state.editor.isCustomDimension ? editorStandartHeight + 18 + 'px' : editorStandartHeight + 'px',
+          }}
+          className={clsx('mt-[99px] w-80  mr-16 z-[40] shadow-none p-0 transition-all overflow-scroll scroll-smooth', {
             hidden: state.editor.previewMode,
           })}>
           {sidebarTabs.map(s => (

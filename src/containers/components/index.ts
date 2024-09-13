@@ -19,3 +19,6 @@ export { default as LayersTab } from './editor/layerstab';
 export { default as Typography } from './editor/typography';
 export { default as Resizable } from './global/resizable';
 export { default as CtxMenu } from './editor/components/contextmenu';
+export { default as UndoRedo } from './editor/undoredo';
+export { default as EditorSizing } from './editor/editorsizing';
+export { default as MediaQuery } from './editor/mediaquery';

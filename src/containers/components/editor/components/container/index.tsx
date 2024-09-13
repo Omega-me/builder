@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { Trash } from 'lucide-react';
 import { IEditorElement } from '@/common/interfaces';
 import { eEditorBtns } from '@/common/enums';
-import { defaultStyles } from '@/common/configs';
+import { defaultStyles, initialCtxMenu } from '@/common/configs';
 import Recursive from '../../recursive';
 import { Badge } from '@/containers/components/ui/badge';
 import { useEditor } from '@/hooks';
@@ -15,14 +15,8 @@ interface Props {
   element: IEditorElement;
 }
 
-const initialCtxMenu = {
-  show: false,
-  x: 0,
-  y: 0,
-};
-
-const ContainerComponent = ({ element }: Props) => {
-  const { id, content, styles, type } = element;
+const ContainerComponent: React.FC<Props> = ({ element }: Props) => {
+  const { id, content, styles, type, name } = element;
   const { state, addElement, clickElement, deleteElement } = useEditor();
   const [ctxMenu, setCtxMenu] = useState(initialCtxMenu);
 
@@ -42,6 +36,7 @@ const ContainerComponent = ({ element }: Props) => {
               color: 'white',
               ...defaultStyles,
             },
+            mediaQuery: {},
             type: eEditorBtns.TEXT,
           },
         });
@@ -60,6 +55,7 @@ const ContainerComponent = ({ element }: Props) => {
               color: 'black',
               ...defaultStyles,
             },
+            mediaQuery: {},
             type: eEditorBtns.LINK,
           },
         });
@@ -74,6 +70,7 @@ const ContainerComponent = ({ element }: Props) => {
             id: v4(),
             name: 'Video',
             styles: {},
+            mediaQuery: {},
             type: eEditorBtns.VIDEO,
           },
         });
@@ -86,6 +83,7 @@ const ContainerComponent = ({ element }: Props) => {
             id: v4(),
             name: 'Container',
             styles: { ...defaultStyles },
+            mediaQuery: {},
             type: eEditorBtns.CONTAINER,
           },
         });
@@ -100,6 +98,7 @@ const ContainerComponent = ({ element }: Props) => {
                 id: v4(),
                 name: 'Container',
                 styles: { ...defaultStyles, width: '100%' },
+                mediaQuery: {},
                 type: eEditorBtns.CONTAINER,
               },
               {
@@ -107,12 +106,14 @@ const ContainerComponent = ({ element }: Props) => {
                 id: v4(),
                 name: 'Container',
                 styles: { ...defaultStyles, width: '100%' },
+                mediaQuery: {},
                 type: eEditorBtns.CONTAINER,
               },
             ],
             id: v4(),
             name: 'Two Columns',
             styles: { ...defaultStyles, display: 'flex' },
+            mediaQuery: {},
             type: eEditorBtns.TWO_COL,
           },
         });
@@ -145,7 +146,11 @@ const ContainerComponent = ({ element }: Props) => {
   const handleCtxMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
+    if (state.editor.selectedElement.id.trim() === '') {
+      return;
+    }
     const { pageX, pageY } = e;
+    console.log(e);
     setCtxMenu({
       show: !ctxMenu.show,
       x: pageX,
@@ -164,6 +169,7 @@ const ContainerComponent = ({ element }: Props) => {
   return (
     <div
       onContextMenu={handleCtxMenu}
+      // TODO: Include media query
       style={styles}
       className={clsx('relative p-4 transition-all group', {
         'max-w-full w-full': type === eEditorBtns.CONTAINER || type === eEditorBtns.TWO_COL,
@@ -184,9 +190,9 @@ const ContainerComponent = ({ element }: Props) => {
       onDragStart={e => handleDragStart(e, eEditorBtns.CONTAINER)}>
       <Badge
         className={clsx('bg-blue-500 text-white absolute z-50 -top-[22px] -left-[1px] rounded-none rounded-t-lg hidden', {
-          block: state.editor.selectedElement.id === element.id && !state.editor.liveMode,
+          block: state.editor.selectedElement.id === id && !state.editor.liveMode,
         })}>
-        {element.name}
+        {name}
       </Badge>
       {Array.isArray(content) && content.map((childElement: IEditorElement) => <Recursive key={childElement.id} element={childElement} />)}
 

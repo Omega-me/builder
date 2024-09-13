@@ -13,9 +13,18 @@ export interface IFunnelPage {
   funnelId: string;
 }
 
+export interface IMediaQuery {
+  [key: string]: {
+    id: string;
+    mediaWidth: number;
+    styles: React.CSSProperties;
+  };
+}
+
 export interface IEditorElement {
   id: string;
   styles: React.CSSProperties;
+  mediaQuery: IMediaQuery;
   name: string;
   type: eEditorBtns | null | string;
   content: IEditorElement[] | { href?: string; innerText?: string; src?: string };
