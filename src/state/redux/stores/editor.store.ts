@@ -43,18 +43,20 @@ export const initialState: IEditorState = {
   history: initialHistoryState,
 };
 
+const editorReducer: EditorReducer = new EditorReducer();
+
 const globalSlice = createSlice({
   name: 'editor',
   initialState,
   reducers: {
     addElement: (state: IEditorState, { payload }: { payload: { containerId: string; elementDetails: IEditorElement } }) => {
-      return new EditorReducer().addElement(state, payload);
+      return editorReducer.addElement(state, payload);
     },
     updateElement: (state: IEditorState, { payload }: { payload: { elementDetails: IEditorElement } }) => {
-      return new EditorReducer().updateElement(state, payload);
+      return editorReducer.updateElement(state, payload);
     },
     deleteElement: (state: IEditorState, { payload }: { payload: { elementDetails: IEditorElement } }) => {
-      new EditorReducer().deleteElement(state, payload);
+      editorReducer.deleteElement(state, payload);
     },
     clickElement: (
       state: IEditorState,
@@ -75,31 +77,31 @@ const globalSlice = createSlice({
         };
       },
     ) => {
-      return new EditorReducer().clickElement(state, payload);
+      return editorReducer.clickElement(state, payload);
     },
     changeDevice: (state: IEditorState, { payload }: { payload: { device: eDeviceTypes } }) => {
-      return new EditorReducer().changeDevice(state, payload);
+      return editorReducer.changeDevice(state, payload);
     },
     changeDimensions: (state: IEditorState, { payload }: { payload: { dimensions?: IEditorDimensions } }) => {
-      return new EditorReducer().changeDimensions(state, payload);
+      return editorReducer.changeDimensions(state, payload);
     },
     toggleCustomDimensions: (state: IEditorState, { payload }: { payload: { isCustomDimension: boolean } }) => {
-      return new EditorReducer().toggleCustomDimensions(state, payload);
+      return editorReducer.toggleCustomDimensions(state, payload);
     },
     togglePreviewMode: (state: IEditorState) => {
-      return new EditorReducer().togglePreviewMode(state);
+      return editorReducer.togglePreviewMode(state);
     },
     toggleLiveMode: (state: IEditorState, { payload }: { payload: { value: boolean } }) => {
-      return new EditorReducer().toggleLiveMode(state, payload);
+      return editorReducer.toggleLiveMode(state, payload);
     },
     redo: (state: IEditorState) => {
-      return new EditorReducer().redo(state);
+      return editorReducer.redo(state);
     },
     undo: (state: IEditorState) => {
-      return new EditorReducer().undo(state);
+      return editorReducer.undo(state);
     },
     refresh: (state: IEditorState) => {
-      return new EditorReducer().refresh(state);
+      return editorReducer.refresh(state);
     },
     loadData: (
       state: IEditorState,
@@ -112,7 +114,7 @@ const globalSlice = createSlice({
         };
       },
     ) => {
-      return new EditorReducer().loadData(state, initialState, initialEditorState, payload);
+      return editorReducer.loadData(state, initialState, initialEditorState, payload);
     },
   },
 });
