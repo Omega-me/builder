@@ -28,7 +28,7 @@ interface Props {
   handleChangeCustomValues: (e: any) => void;
 }
 
-const SettingsTab = (props: Props) => {
+const StylingsTab = (props: Props) => {
   const { handleChangeCustomValues, handleOnChanges, state } = props;
 
   return (
@@ -390,4 +390,4 @@ const SettingsTab = (props: Props) => {
   );
 };
 
-export default SettingsTab;
+export default StylingsTab;

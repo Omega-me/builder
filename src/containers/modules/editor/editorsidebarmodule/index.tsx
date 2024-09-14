@@ -48,6 +48,7 @@ const EditorSidebarModule = () => {
       stylings={{
         handleOnChanges: handleOnChangesSettingsTab,
         handleChangeCustomValues: handleChangeCustomValuesSettingsTab,
+        updateElement,
       }}
     />
   );

@@ -1,6 +1,6 @@
 import { Database, MousePointerClick, Plus, Settings, SquareStackIcon, SwatchBook } from 'lucide-react';
 import { eSideBarTabs } from '../enums';
-import { ComponentsTab, LayersTab, MediaQuery, SettingsTab } from '@/containers/components';
+import { ComponentsTab, LayersTab, MediaQuery, StylingsTab } from '@/containers/components';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/containers/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/containers/components/ui/tabs';
 import { IEditorSidebarProps } from '../interfaces';
@@ -33,7 +33,7 @@ export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.R
           ) : (
             <>
               <TabsContent value="default">
-                <SettingsTab
+                <StylingsTab
                   handleChangeCustomValues={props.stylings.handleChangeCustomValues}
                   handleOnChanges={props.stylings.handleOnChanges}
                   state={props.state}
@@ -45,6 +45,7 @@ export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.R
                   handleChangeCustomValues={props.stylings.handleChangeCustomValues}
                   handleOnChanges={props.stylings.handleOnChanges}
                   state={props.state}
+                  updateElement={props.stylings.updateElement}
                 />
               </TabsContent>
             </>

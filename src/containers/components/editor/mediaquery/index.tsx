@@ -1,21 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
-import { Button } from '../../ui/button';
-import { Save, Plus, PencilRuler } from 'lucide-react';
-import { Label } from '../../ui/label';
-import { Input } from '../../ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../../ui/select';
-import { SettingsTab } from '../..';
-import { IEditorState } from '@/common/interfaces';
+import { MediaQueryForm, StylingsTab } from '../..';
+import { IEditorElement, IEditorState } from '@/common/interfaces';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../ui/tooltip';
 
 interface Props {
   state: IEditorState;
   handleOnChanges: (e: any) => void;
   handleChangeCustomValues: (e: any) => void;
+  updateElement: (payload: { elementDetails: IEditorElement }) => void;
 }
 
 const mediaQuery: {
@@ -25,12 +20,13 @@ const mediaQuery: {
     id: 1,
     content: (props: Props) => (
       <div>
-        <a href="#styling_header">
-          <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-center items-center rounded-md cursor-pointer text-slate-400 text-sm">
+        <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-between items-center rounded-md cursor-pointer text-slate-400 text-sm">
+          <a className="flex items-center pl-4 w-full h-full flex-1" href="#styling_header">
             Mobile
-          </div>
-        </a>
-        <SettingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
+          </a>
+          <MediaQueryForm isEdit={true} state={props.state} updateElement={props.updateElement} />
+        </div>
+        <StylingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
       </div>
     ),
   },
@@ -38,12 +34,13 @@ const mediaQuery: {
     id: 2,
     content: (props: Props) => (
       <div>
-        <a href="#styling_header">
-          <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-center items-center rounded-md cursor-pointer text-slate-400 text-sm">
-            Desktop
-          </div>
-        </a>
-        <SettingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
+        <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-between items-center rounded-md cursor-pointer text-slate-400 text-sm">
+          <a className="flex items-center pl-4 w-full h-full flex-1" href="#styling_header">
+            desktop
+          </a>
+          <MediaQueryForm isEdit={true} state={props.state} updateElement={props.updateElement} />
+        </div>
+        <StylingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
       </div>
     ),
   },
@@ -51,12 +48,13 @@ const mediaQuery: {
     id: 2,
     content: (props: Props) => (
       <div>
-        <a href="#styling_header">
-          <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-center items-center rounded-md cursor-pointer text-slate-400 text-sm">
+        <div className="sticky top-14 z-50 ml-2 w-[95%] h-10 bg-slate-800 flex justify-between items-center rounded-md cursor-pointer text-slate-400 text-sm">
+          <a className="flex items-center pl-4 w-full h-full flex-1" href="#styling_header">
             max-width-700
-          </div>
-        </a>
-        <SettingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
+          </a>
+          <MediaQueryForm isEdit={true} state={props.state} updateElement={props.updateElement} />
+        </div>
+        <StylingsTab handleChangeCustomValues={props.handleChangeCustomValues} handleOnChanges={props.handleOnChanges} state={props.state} />
       </div>
     ),
   },
@@ -64,6 +62,7 @@ const mediaQuery: {
 
 const MediaQuery: React.FC<Props> = props => {
   const [val, setVal] = useState('');
+
   return (
     <>
       <Card className="m-2">
@@ -72,64 +71,25 @@ const MediaQuery: React.FC<Props> = props => {
           <CardDescription>Manage your media query stylings</CardDescription>
         </CardHeader>
         <CardContent>
-          <Popover>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <PopoverTrigger asChild className="ml-2">
-                  <Button variant="outline">
-                    <Plus size={15} />
-                    <p className="m-2">New</p>
-                  </Button>
-                </PopoverTrigger>
-              </TooltipTrigger>
-              <TooltipContent side="right">New media query</TooltipContent>
-            </Tooltip>
-            <PopoverContent className="w-75">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">Media Query</h4>
-                  <p className="text-sm text-muted-foreground">Edit media query parameters</p>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-sm">Set width from editor</p>
-                    </div>
-                    <Button variant="outline">
-                      <PencilRuler size={15} />
-                    </Button>
-                  </div>
-                </div>
-                <div className="grid gap-2">
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" defaultValue="Mobile" className="col-span-2 h-8" />
-                  </div>
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="maxWidth">Max. width</Label>
-                    <Input id="maxWidth" defaultValue="300px" className="col-span-2 h-8" />
-                  </div>
-                  <div className="w-full flex justify-end gap-1">
-                    <Button variant="outline">
-                      <Save width={15} />
-                      <p className="m-2">Save</p>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Select onValueChange={setVal}>
-            <SelectTrigger className="w-[95%] ml-2 mt-5">
-              <SelectValue placeholder="Select Media Query" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Select Media Query</SelectLabel>
-                <SelectItem value="mobile">Mobile</SelectItem>
-                <SelectItem value="desktop">Desktop</SelectItem>
-                <SelectItem value="max-width-700">max-width-700</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <MediaQueryForm state={props.state} updateElement={props.updateElement} />
+
+          {Object.keys(props.state.editor.selectedElement.mediaQuery).length > 0 && (
+            <Select onValueChange={setVal}>
+              <SelectTrigger className="w-[95%] ml-2 mt-5">
+                <SelectValue placeholder="Select Media Query" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Select Media Query</SelectLabel>
+                  {Object.keys(props.state.editor.selectedElement.mediaQuery).map(k => (
+                    <SelectItem key={k} value={k}>
+                      {k}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
         </CardContent>
       </Card>
 

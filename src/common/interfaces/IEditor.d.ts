@@ -1,20 +1,7 @@
 import { eDeviceTypes, eEditorBtns } from '../enums';
 
-export interface IFunnelPage {
-  id: string;
-  name: string;
-  pathName: string;
-  createdAt: Date;
-  updatedAt: Date;
-  visits: number;
-  content: string | null;
-  order: number;
-  previewImage: string | null;
-  funnelId: string;
-}
-
 export interface IMediaQuery {
-  [key: string]: {
+  [name: string]: {
     id: string;
     mediaWidth: number;
     styles: React.CSSProperties;
@@ -61,5 +48,6 @@ export interface IEditorSidebarProps {
   stylings: {
     handleOnChanges: (e: any) => void;
     handleChangeCustomValues: (e: any) => void;
+    updateElement: (payload: { elementDetails: IEditorElement }) => void;
   };
 }

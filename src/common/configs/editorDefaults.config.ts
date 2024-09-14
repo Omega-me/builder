@@ -1,4 +1,4 @@
-import { IEditorElement } from '../interfaces';
+import { IEditorElement, IMediaQuery } from '../interfaces';
 
 export const defaultStyles: React.CSSProperties = {
   backgroundPosition: 'center',

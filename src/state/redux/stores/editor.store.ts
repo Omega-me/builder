@@ -1,5 +1,5 @@
 import { eDeviceTypes, eEditorBtns } from '@/common/enums';
-import { IEditorDimensions, IEditorElement, IEditorState, IHistoryState } from '@/common/interfaces';
+import { IEditorDimensions, IEditorElement, IEditorState, IHistoryState, IMediaQuery } from '@/common/interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { EditorReducer } from '../reducers/editor.reducer';
 import { getWindowDimensions } from '@/common/lib/utils';
