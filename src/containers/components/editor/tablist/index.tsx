@@ -27,7 +27,7 @@ const TabList: React.FC<Props> = props => {
           </TabsTrigger>
         ))}
       </div>
-      {/* TODO: add other button sand functionalities at the end of the sidebar */}
+      {/* TODO: add other buttons and functionalities at the end of the sidebar */}
       {/* <div className="flex-1 w-fit flex flex-col justify-end">
         <Button variant="outline" className="w-10 h-10 p-0">
           <CircleHelp />

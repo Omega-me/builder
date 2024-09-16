@@ -3,7 +3,7 @@ import { EditorSidebar } from '@/containers/components';
 import { useEditor } from '@/hooks';
 
 const EditorSidebarModule = () => {
-  const { state, editorStandartHeight, updateElement } = useEditor();
+  const { state, updateElement } = useEditor();
 
   const handleOnChangesSettingsTab = (e: any) => {
     const styleSettings = e.target.id;
@@ -43,12 +43,9 @@ const EditorSidebarModule = () => {
 
   return (
     <EditorSidebar
-      state={state}
-      editorStandartHeight={editorStandartHeight}
       stylings={{
         handleOnChanges: handleOnChangesSettingsTab,
         handleChangeCustomValues: handleChangeCustomValuesSettingsTab,
-        updateElement,
       }}
     />
   );

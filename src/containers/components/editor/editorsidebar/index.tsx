@@ -3,12 +3,19 @@ import clsx from 'clsx';
 import { Sheet, SheetContent } from '../../ui/sheet';
 import { Tabs } from '../../ui/tabs';
 import { TabList } from '../..';
-import { IEditorSidebarProps } from '@/common/interfaces';
 import { eSideBarTabs } from '@/common/enums';
 import { sidebarTabs } from '@/common/configs';
+import { useEditor } from '@/hooks';
 
-const EditorSidebar: React.FC<IEditorSidebarProps> = props => {
-  const { state, editorStandartHeight } = props;
+interface Props {
+  stylings: {
+    handleOnChanges: (e: any) => void;
+    handleChangeCustomValues: (e: any) => void;
+  };
+}
+
+const EditorSidebar: React.FC<Props> = props => {
+  const { state, editorStandartHeight } = useEditor();
   return (
     <Sheet open={true} modal={false}>
       <Tabs defaultValue={eSideBarTabs.STYLINGS}>
@@ -30,7 +37,7 @@ const EditorSidebar: React.FC<IEditorSidebarProps> = props => {
             hidden: state.editor.previewMode,
           })}>
           {sidebarTabs.map(s => (
-            <div key={s.id}>{s.content(props)}</div>
+            <div key={s.id}>{s.content({ state, ...props })}</div>
           ))}
         </SheetContent>
       </Tabs>

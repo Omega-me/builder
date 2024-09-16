@@ -3,15 +3,21 @@ import { eSideBarTabs } from '../enums';
 import { ComponentsTab, LayersTab, MediaQuery, StylingsTab } from '@/containers/components';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/containers/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/containers/components/ui/tabs';
-import { IEditorSidebarProps } from '../interfaces';
+import { IEditorState } from '../interfaces';
 import { Alert, AlertDescription, AlertTitle } from '@/containers/components/ui/alert';
 
-export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.ReactNode; content: (props: IEditorSidebarProps) => React.ReactNode }[] = [
+export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.ReactNode; content: (props: any) => React.ReactNode }[] = [
   {
     id: 1,
     Icon: () => <SwatchBook />,
     value: eSideBarTabs.STYLINGS,
-    content: (props: IEditorSidebarProps) => (
+    content: (props: {
+      state: IEditorState;
+      stylings: {
+        handleOnChanges: (e: any) => void;
+        handleChangeCustomValues: (e: any) => void;
+      };
+    }) => (
       <TabsContent value={eSideBarTabs.STYLINGS}>
         <SheetHeader id="styling_header" className="text-left p-6">
           <SheetTitle>{eSideBarTabs.STYLINGS}</SheetTitle>
@@ -33,20 +39,11 @@ export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.R
           ) : (
             <>
               <TabsContent value="default">
-                <StylingsTab
-                  handleChangeCustomValues={props.stylings.handleChangeCustomValues}
-                  handleOnChanges={props.stylings.handleOnChanges}
-                  state={props.state}
-                />
+                <StylingsTab handleChangeCustomValues={props.stylings.handleChangeCustomValues} handleOnChanges={props.stylings.handleOnChanges} />
               </TabsContent>
 
               <TabsContent value="media_query">
-                <MediaQuery
-                  handleChangeCustomValues={props.stylings.handleChangeCustomValues}
-                  handleOnChanges={props.stylings.handleOnChanges}
-                  state={props.state}
-                  updateElement={props.stylings.updateElement}
-                />
+                <MediaQuery handleChangeCustomValues={props.stylings.handleChangeCustomValues} handleOnChanges={props.stylings.handleOnChanges} />
               </TabsContent>
             </>
           )}
@@ -72,7 +69,7 @@ export const sidebarTabs: { id: number; value: eSideBarTabs; Icon: () => React.R
     id: 3,
     Icon: () => <SquareStackIcon />,
     value: eSideBarTabs.LAYERS,
-    content: (props: IEditorSidebarProps) => (
+    content: (props: { state: IEditorState }) => (
       <TabsContent value={eSideBarTabs.LAYERS}>
         <SheetHeader className="text-left p-6 ">
           <SheetTitle>{eSideBarTabs.LAYERS}</SheetTitle>

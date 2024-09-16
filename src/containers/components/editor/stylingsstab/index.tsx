@@ -21,15 +21,16 @@ import { Label } from '../../ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../../ui/select';
 import { Slider } from '../../ui/slider';
 import { IEditorState } from '@/common/interfaces';
+import { useEditor } from '@/hooks';
 
 interface Props {
-  state: IEditorState;
   handleOnChanges: (e: any) => void;
   handleChangeCustomValues: (e: any) => void;
 }
 
 const StylingsTab = (props: Props) => {
-  const { handleChangeCustomValues, handleOnChanges, state } = props;
+  const { state } = useEditor();
+  const { handleChangeCustomValues, handleOnChanges } = props;
 
   return (
     <Accordion type="multiple" defaultValue={['Typography', 'Dimensions', 'Decorations', 'Flexbox']}>
